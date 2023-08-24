@@ -1,39 +1,27 @@
 import React from 'react';
 import '../styles.css';
-export class Searchbar extends React.Component {
-  state = {
-    tag: '',
-  };
 
-  handleTagChange = e => {
-    this.setState({ tag: e.currentTarget.value });
-  };
-
-  hadleSubmit = e => {
+export const Searchbar = ({ onSubmit }) => {
+  const handleFormSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.tag);
-    this.setState({ tag: '' });
+    const inputValue = e.target.input.value;
+    onSubmit(inputValue);
   };
 
-  render() {
-    return (
-      <header className="searchbar">
-        <form onSubmit={this.hadleSubmit} className="searchForm">
-          <button type="submit" className="searchForm-button">
-            <span className="searchForm-button-label">Search</span>
-          </button>
+  return (
+    <header className="searchbar">
+      <form onSubmit={handleFormSubmit} className="searchForm">
+        <button type="submit" className="searchForm-button">
+          <span className="searchForm-button-label">Search</span>
+        </button>
 
-          <input
-            className="searchForm-input"
-            type="text"
-            onChange={this.handleTagChange}
-            value={this.state.tag}
-            //   autocomplete="off"
-            //   autofocus
-            placeholder="Search images and photos"
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          name="input"
+          className="searchForm-input"
+          type="text"
+          placeholder="Search images and photos"
+        />
+      </form>
+    </header>
+  );
+};

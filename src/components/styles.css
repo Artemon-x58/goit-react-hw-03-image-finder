@@ -73,7 +73,8 @@ img {
 
 .searchForm-button {
   display: inline-block;
-  width: 48px;
+  color: #212121;
+  width: 80px;
   height: 48px;
   border: 0;
   /* background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg'); */
@@ -91,15 +92,8 @@ img {
 }
 
 .searchForm-button-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  clip-path: inset(50%);
-  border: 0;
+  font-size: 18px;
+  width: 80px;
 }
 
 .searchForm-input {
@@ -175,8 +169,14 @@ img {
 .Modal {
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
+  overflow: auto;
 }
-
+.loader {
+  display: block;
+  background-color: tomato;
+  margin-left: auto;
+  margin-right: auto;
+}
 /*
 * Стили компонента Buton (Load more)
 */
@@ -189,6 +189,11 @@ img {
   display: inline-block;
   color: #fff;
   border: 0;
+  margin-top: 40px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 100px;
   text-decoration: none;
   cursor: pointer;
   font-family: inherit;
