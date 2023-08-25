@@ -2,8 +2,9 @@ import React from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { BtnLoadMore } from './Button/Button';
-import { Grid } from 'react-loader-spinner';
+
 import { funcRequest } from './js/api';
+import { Loader } from './Loader/Loader';
 export class App extends React.Component {
   state = {
     tag: '',
@@ -14,31 +15,23 @@ export class App extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.tag !== prevState.tag) {
+    if (
+      this.state.tag !== prevState.tag ||
+      this.state.page !== prevState.page
+    ) {
       this.onStartLoader();
       funcRequest(this.state.tag, this.state.page)
         .then(data => {
-          this.onCloseLoader();
           if (data.totalHits === 0) {
             alert('Oops! No images found. Please enter another word');
           }
-          this.setState({
-            images: data.hits,
-            page: 1,
-            loadMore: this.state.page < Math.ceil(data.totalHits / 12),
-          });
-        })
-        .catch(err => console.log(err));
-    }
-    if (this.state.page !== prevState.page) {
-      funcRequest(this.state.tag, this.state.page)
-        .then(data => {
           this.setState(prev => ({
             images: [...prev.images, ...data.hits],
             loadMore: this.state.page < Math.ceil(data.totalHits / 12),
           }));
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
+        .finally(this.onCloseLoader());
     }
   }
   onStartLoader = () => {
@@ -49,7 +42,7 @@ export class App extends React.Component {
     this.setState({ loader: false });
   };
   onChangeTag = newTag => {
-    this.setState({ tag: newTag });
+    this.setState({ tag: newTag, page: 1, images: [], loadMore: false });
   };
 
   onChangePage = () => {
@@ -61,15 +54,7 @@ export class App extends React.Component {
       <>
         <Searchbar onSubmit={this.onChangeTag} />;
         {this.state.loader === true ? (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: '200px',
-            }}
-          >
-            <Grid />
-          </div>
+          <Loader />
         ) : (
           <>
             <ImageGallery
