@@ -14,28 +14,27 @@ export const App = () => {
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    if (tag !== '' || page !== 1) {
-      toggleLoader();
+    if (!tag) return;
+    toggleLoader();
 
-      function getPictures() {
-        funcRequest(tag, page)
-          .then(data => {
-            if (data.totalHits === 0) {
-              alert('Oops! No images found. Please enter another word');
-              return;
-            }
-            setImages(prevImages => [...prevImages, ...data.hits]);
-            setLoadMore(page < Math.ceil(data.totalHits / 12));
-          })
-          .catch(err => {
-            console.log(err);
-          })
-          .finally(() => {
-            toggleLoader();
-          });
-      }
-      getPictures();
+    function getPictures() {
+      funcRequest(tag, page)
+        .then(data => {
+          if (data.totalHits === 0) {
+            alert('Oops! No images found. Please enter another word');
+            return;
+          }
+          setImages(prevImages => [...prevImages, ...data.hits]);
+          setLoadMore(page < Math.ceil(data.totalHits / 12));
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          toggleLoader();
+        });
     }
+    getPictures();
   }, [tag, page]);
   const toggleLoader = () => {
     setLoader(prevLoader => !prevLoader);
@@ -48,7 +47,7 @@ export const App = () => {
   };
 
   const onChangePage = () => {
-    setPage(page + 1);
+    setPage(prevPage => prevPage + 1);
   };
 
   return (
